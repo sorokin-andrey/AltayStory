@@ -11,22 +11,15 @@ public class MainDispatcher : MonoBehaviour {
 
 	public static MouseActionWithObjects actionType = MouseActionWithObjects.NoAction;
 
-	//Move object
-	float spring = 1000.0f;
-	float damper = 1.0f;
-	float drag = 1.0f;
-	float angularDrag = 1000f;
-	float distance = 0.002f;
-	bool attachToCenterOfMass = false;
-	private SpringJoint springJoint;
-	public static Vector3 defaultVector3 = Vector3.zero;//Vector3(0,0,0);
 	public static SocialNetwork currentSocialNetwork;
-	//private static Random random = new Random();
-	
+	public static MainDispatcher instance = null;
+
 	void Awake() {
 		if (instance == null) {
 #if UNITY_FLASH
 ActionScript.Import("com.edde.temphook.SocialNetwork");
+			instance = this;
+			currentSocialNetwork = SocialNetwork.create("VK");
 #endif
 			instance = this;
 			currentSocialNetwork = SocialNetwork.create("VK");
@@ -36,8 +29,6 @@ ActionScript.Import("com.edde.temphook.SocialNetwork");
 			#else
 			MyDateTime.CheckMinValue();
 			#endif
-			actionStorage = gameObject.AddComponent<ActionStorage>();
-			actionStorage.SendToServer();
 		}
 	}
 	
@@ -45,5 +36,15 @@ ActionScript.Import("com.edde.temphook.SocialNetwork");
 		if (instance == null) {
 			instance = this;
 		}
+	}
+
+	public static void SendMessageToSocial(string type, MyFunctionDataClass callback) {
+		if (type == "get_friends") {
+			currentSocialNetwork.getMutualFriends(callback);
+		}
+	}
+
+	public static void ReturnMessageFromSocial(UnityEngine.Object data) {
+		Debug.Log("return + " + data);
 	}
 }

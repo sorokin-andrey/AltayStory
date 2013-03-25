@@ -142,7 +142,7 @@ ActionScript.Import("com.edde.temphook.MyFunctionClass");
 	}
 	
 	[NotRenamed]
-	public void getMutualFriends() {
+	public void getMutualFriends(MyFunctionDataClass callback) {
 		
 	}
 	
